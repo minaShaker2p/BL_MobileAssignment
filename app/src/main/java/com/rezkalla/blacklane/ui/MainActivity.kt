@@ -52,5 +52,9 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
             addItemDecoration(VerticalSpaceItemDecoration(24))
             adapter = postsAdapter
         }
+        swipePosts.setOnRefreshListener {
+            viewModel.refresh()
+            swipePosts.isRefreshing=false
+        }
     }
 }

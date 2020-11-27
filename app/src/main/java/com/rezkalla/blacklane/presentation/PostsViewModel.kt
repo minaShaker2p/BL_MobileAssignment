@@ -41,4 +41,8 @@ class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUs
         _postsLiveData.postValue(posts)
     }
 
+    fun refresh() {
+        getPosts()
+    }
+
 }
