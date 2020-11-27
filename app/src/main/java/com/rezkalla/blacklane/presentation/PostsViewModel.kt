@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rezkalla.blacklane.model.PostUI
+import com.rezkalla.blacklane.model.map
 import com.rezkalla.core.domain.entity.PostEntity
 import com.rezkalla.core.domain.usecase.GetPostsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +20,8 @@ class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUs
      *  can change the value privately with _postsLiveData.value = "value"
      *  and expose only an immutable LiveData (so Activity or Fragment can not change its value ).
      */
-    private val _postsLiveData = MutableLiveData<List<PostEntity>>()
-    val postsLiveData: LiveData<List<PostEntity>> get() = _postsLiveData
+    private val _postsLiveData = MutableLiveData<List<PostUI>>()
+    val postsLiveData: LiveData<List<PostUI>> get() = _postsLiveData
 
 
     init {
@@ -33,7 +35,9 @@ class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUs
     }
 
     private suspend fun filter() = withContext(Dispatchers.IO) {
-        val posts = getPostsUseCase()
+        val posts = getPostsUseCase().map {
+            it.map()
+        }
         _postsLiveData.postValue(posts)
     }
 
