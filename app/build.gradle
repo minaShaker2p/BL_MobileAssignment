@@ -38,6 +38,7 @@ dependencies {
     // Recycler view and Card View
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit2Version"
