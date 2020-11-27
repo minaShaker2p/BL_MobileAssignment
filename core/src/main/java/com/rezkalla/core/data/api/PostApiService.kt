@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface PostApiService {
 
-    @GET
+    @GET("posts")
     suspend fun getPosts(): List<PostEntity>
 }
