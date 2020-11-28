@@ -23,26 +23,41 @@ class PostsViewModel @Inject constructor(private val getPostsUseCase: GetPostsUs
     private val _postsLiveData = MutableLiveData<List<PostUI>>()
     val postsLiveData: LiveData<List<PostUI>> get() = _postsLiveData
 
+    private val posts = mutableListOf<PostUI>()
+
 
     init {
-        getPosts()
-    }
-
-    private fun getPosts() {
         viewModelScope.launch {
-            filter()
+            getPosts()
         }
     }
 
-    private suspend fun filter() = withContext(Dispatchers.IO) {
-        val posts = getPostsUseCase().map {
-            it.map()
+    private  fun getPosts() {
+        viewModelScope.launch(Dispatchers.IO)
+        {
+            posts.addAll(getPostsUseCase().map {
+                it.map()
+            })
+            _postsLiveData.postValue(posts)
         }
-        _postsLiveData.postValue(posts)
     }
+
+
+    fun filterPosts(word: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (word.isNotEmpty()) {
+                _postsLiveData.postValue(posts.filter {
+                    it.title.contains(word)
+                })
+            } else {
+                _postsLiveData.postValue(posts)
+            }
+        }
+    }
+
 
     fun refresh() {
-        getPosts()
+            getPosts()
     }
 
 }

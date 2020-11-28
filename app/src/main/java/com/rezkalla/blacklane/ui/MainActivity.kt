@@ -10,6 +10,7 @@ import com.rezkalla.blacklane.R
 import com.rezkalla.blacklane.presentation.PostsViewModel
 import com.rezkalla.blacklane.utils.VerticalSpaceItemDecoration
 import com.rezkalla.blacklane.utils.ViewModelFactory
+import com.rezkalla.blacklane.utils.afterTextChanged
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -43,7 +44,9 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         viewModel.postsLiveData.observe(this, Observer {
             postsAdapter.update(it)
         })
-
+        edtFilter.afterTextChanged {
+            viewModel.filterPosts(it)
+        }
     }
 
     private fun setupRecyclerView() {
