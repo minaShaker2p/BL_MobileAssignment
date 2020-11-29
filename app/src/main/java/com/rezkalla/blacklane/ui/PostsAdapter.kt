@@ -8,7 +8,8 @@ import com.rezkalla.blacklane.R
 import com.rezkalla.blacklane.model.PostUI
 import kotlinx.android.synthetic.main.item_post.view.*
 
-class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
+class PostsAdapter(private val clickListener: OnPostClickListener) :
+    RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
 
     private val posts = mutableListOf<PostUI>()
 
@@ -19,21 +20,27 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
         }
     }
 
-    fun update(list:List<PostUI>)
-    {
+    fun update(list: List<PostUI>) {
         posts.clear()
         posts.addAll(list)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post,parent,false)
-        return  PostViewHolder(view)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
+        return PostViewHolder(view)
     }
 
     override fun getItemCount() = posts.size
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-       holder.bind(post = posts[position])
+        holder.bind(post = posts[position])
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(postId = posts[position].postId)
+        }
     }
+}
+
+interface OnPostClickListener {
+    fun onClick(postId: Int)
 }

@@ -2,6 +2,8 @@ package com.rezkalla.blacklane.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +20,7 @@ import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), HasAndroidInjector {
+class MainActivity : AppCompatActivity(), HasAndroidInjector, OnPostClickListener {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         return androidInjector
     }
 
-    private val postsAdapter = PostsAdapter()
+    private val postsAdapter = PostsAdapter(this)
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<PostsViewModel>
@@ -59,5 +61,16 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
             viewModel.refresh()
             swipePosts.isRefreshing=false
         }
+    }
+
+    override fun onClick(postId: Int) {
+     onAlertDialog(postId)
+    }
+
+    private fun onAlertDialog(postId: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Post Id")
+        builder.setMessage("$postId")
+        builder.show()
     }
 }
